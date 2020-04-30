@@ -2,11 +2,24 @@
 
 
 import React from 'react';
-import { FlatList } from 'react-native'
+import { FlatList, Text } from 'react-native'
+import { useSelector } from 'react-redux'
 
 
 const ProductsOverviewScreen = props => {
-    return <FlatList />
+    // get the products with useSelector that take a function that automatically
+    // recibe the state as an input and return any data that you want from there
+    // this the redux state is on APP.js     same name on the redux state
+    //                                              |
+    //                                              |           
+    const products = useSelector(state => state.products.availableProducts)
+    // products is an array
+    return <FlatList 
+            data={products}
+            keyExtractor={item => item.id}
+            //renderItem ponts on a function that render our diffents items
+            renderItem={itemData => <Text>{itemData.title}</Text>}/>
 }
 
-export default ProductsOverviewScreen
+export default ProductsOverviewScreen            
+    //                                  
