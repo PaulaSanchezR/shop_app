@@ -1,8 +1,8 @@
 import React from 'react';
-import {  Text, View } from 'react-native';
 import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux'
 import productsReducer from './Store/reducers/products'
+import ShopNavigation from './navigation/ShopNavigation'
 
 // we need to combine the reducers we pass an object where we map my reducers
 const rootReducer = combineReducers({
@@ -15,7 +15,7 @@ export default function App() {
   return (
     // we create our Provider component
     <Provider store={store}>
-      <Text>New App</Text>
+      <ShopNavigation />
     </Provider>
   );
 }

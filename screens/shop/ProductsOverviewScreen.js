@@ -13,12 +13,14 @@ const ProductsOverviewScreen = props => {
     //                                              |
     //                                              |           
     const products = useSelector(state => state.products.availableProducts)
+    
     // products is an array
     return <FlatList 
             data={products}
             keyExtractor={item => item.id}
             //renderItem ponts on a function that render our diffents items
-            renderItem={itemData => <Text>{itemData.title}</Text>}/>
+            renderItem={itemData => <Text>{itemData.item.title}</Text>}
+            />
 }
 
 export default ProductsOverviewScreen            

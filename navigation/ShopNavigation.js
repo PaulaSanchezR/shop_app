@@ -19,12 +19,12 @@ const ProductsNavigatior = createStackNavigator({
 },{// this second argunt let me configure the entire navigator
     defaultNavigationOptions:{
         headerStyle: {
-            backgroundColor: Colors.primary
+            backgroundColor: Platform.OS === 'android' ? Colors.primary : ''
         },
-        headerTintColor:'white'
+        headerTintColor: Platform.OS === 'android' ? 'white'  : 'black'
 
         }
-    }
+    })
 
-
-})
+  // we dont export the navigatior we wrap it on container  
+  export default createAppContainer(ProductsNavigatior)
