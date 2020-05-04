@@ -1,6 +1,7 @@
 {
   "expo": {
-    "name": "HelloWorld",
+    "name": "Shop",
+    "description" :"",
     "slug": "shop-app",
     "platforms": [
       "ios",
@@ -9,11 +10,11 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/original.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/places-adaptive.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#171717"
     },
     "updates": {
       "fallbackToCacheTimeout": 0

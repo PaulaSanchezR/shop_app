@@ -4,6 +4,10 @@
 import React from 'react';
 import { FlatList, Text } from 'react-native'
 import { useSelector } from 'react-redux'
+import ProductItem from '../../components/shop/ProductItem'
+import Product from '../../models/products';
+
+
 
 
 const ProductsOverviewScreen = props => {
@@ -19,7 +23,20 @@ const ProductsOverviewScreen = props => {
             data={products}
             keyExtractor={item => item.id}
             //renderItem ponts on a function that render our diffents items
-            renderItem={itemData => <Text>{itemData.item.title}</Text>}
+            renderItem={itemData => 
+            <ProductItem 
+                image ={itemData.item.imageUrl} 
+                title ={itemData.item.title} 
+                price={itemData.item.price}
+                onViewDetail={() =>{
+                    // we going to forward our product data 
+                    props.navigation.navigate('ProductDetail', {productId: itemData.item.id}) // < -- forward the id
+                    //                              ^                   
+                    //                              |
+                    //                         identifier from the ShopNavigation page 
+                }}
+                onAddToCart={() =>{}}
+            />}
             />
 }
 

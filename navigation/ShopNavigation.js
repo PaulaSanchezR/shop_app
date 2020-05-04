@@ -8,6 +8,7 @@ import { createStackNavigator} from 'react-navigation-stack';
 // import Colors from '../constants/Colors'
 // import { Ionicons } from '@expo/vector-icons
 import ProductsOverviewScreen from '../screens/shop/ProductsOverviewScreen'
+import ProductDetailScreen from '../screens/shop/ProductDetailScreen'
 import Colors from '../constants/Colors'
 
 
@@ -15,7 +16,8 @@ import Colors from '../constants/Colors'
 // we map string identifier that will be loaing as a screens
 
 const ProductsNavigatior = createStackNavigator({
-    ProductsOverview : ProductsOverviewScreen,
+    ProductsOverview : ProductsOverviewScreen, // this is our start screen because is the firt on the list
+    ProductDetail: ProductDetailScreen
 },{// this second argunt let me configure the entire navigator
     defaultNavigationOptions:{
         headerStyle: {
