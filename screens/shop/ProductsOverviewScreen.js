@@ -3,9 +3,11 @@
 
 import React from 'react';
 import { FlatList, Text } from 'react-native'
-import { useSelector } from 'react-redux'
+import { useSelector , useDispatch} from 'react-redux'
 import ProductItem from '../../components/shop/ProductItem'
 import Product from '../../models/products';
+import * as cartActions  from '../../Store/actions/cart'
+
 
 
 
@@ -17,8 +19,10 @@ const ProductsOverviewScreen = props => {
     //                                              |
     //                                              |           
     const products = useSelector(state => state.products.availableProducts)
-    
-    // products is an array
+     // products is an array
+
+    //useDispatch is  
+    const dispatch = useDispatch()
     return <FlatList 
             data={products}
             keyExtractor={item => item.id}
@@ -36,7 +40,10 @@ const ProductsOverviewScreen = props => {
                     //                         identifier from the ShopNavigation page 
 
                 }}
-                onAddToCart={() =>{}}
+                onAddToCart={() =>{
+                    // addToCart is my function action
+                    dispatch(cartActions.addToCart(itemData.item))
+                }}
             />}
             />
 }
