@@ -30,10 +30,11 @@ const ProductsOverviewScreen = props => {
                 price={itemData.item.price}
                 onViewDetail={() =>{
                     // we going to forward our product data 
-                    props.navigation.navigate('ProductDetail', {productId: itemData.item.id}) // < -- forward the id
+                    props.navigation.navigate('ProductDetail', {productId: itemData.item.id , productTitle: itemData.item.title}) // < -- forward the id
                     //                              ^                   
                     //                              |
                     //                         identifier from the ShopNavigation page 
+
                 }}
                 onAddToCart={() =>{}}
             />}
