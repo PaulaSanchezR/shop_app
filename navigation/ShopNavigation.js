@@ -9,6 +9,7 @@ import { createStackNavigator} from 'react-navigation-stack';
 // import { Ionicons } from '@expo/vector-icons
 import ProductsOverviewScreen from '../screens/shop/ProductsOverviewScreen'
 import ProductDetailScreen from '../screens/shop/ProductDetailScreen'
+import CartScreen from '../screens/shop/CartScreen'
 import Colors from '../constants/Colors'
 
 
@@ -17,7 +18,8 @@ import Colors from '../constants/Colors'
 
 const ProductsNavigatior = createStackNavigator({
     ProductsOverview : ProductsOverviewScreen, // this is our start screen because is the firt on the list
-    ProductDetail: ProductDetailScreen
+    ProductDetail: ProductDetailScreen,
+    Cart: CartScreen
 },{// this second argunt let me configure the entire navigator
     defaultNavigationOptions:{
         headerStyle: {

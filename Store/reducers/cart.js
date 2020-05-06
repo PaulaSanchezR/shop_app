@@ -40,7 +40,7 @@ export default (state = initialState, action) =>{
         }else {
             //add a new item (quantity, productPrice, productTitle, sum
             updateOrNewCartItem = new CartItem(1, prodPrice,prodTitle,prodPrice);
-            console.log(updateOrNewCartItem)
+            //console.log(updateOrNewCartItem)
             return {
                 ...state, //copy of our state
             //a new item where I copy my existing items
