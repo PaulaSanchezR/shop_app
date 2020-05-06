@@ -4,7 +4,7 @@ import React from 'react';
 import { View ,Text, FlatList, StyleSheet, Button} from 'react-native';
 import { useSelector } from 'react-redux';
 import Colors from '../../constants/Colors';
-
+import CartItem from '../../components/shop/CartItem'
 
 const CartScreen = props =>{
     // our cart is store in Redux on app js and we use useSelector to bring the totalamoung cart/reducers.js
@@ -23,7 +23,7 @@ const CartScreen = props =>{
            
             })
         }
-        console.log(transformedCartItems)
+       
         return  transformedCartItems;
         })
    
@@ -38,7 +38,16 @@ const CartScreen = props =>{
                     title="Order Now" 
                     disabled={cartItems.length === 0 } />
             </View>
-            <View><Text>CART ITEMS</Text></View>
+            <FlatList 
+                data={cartItems}
+                keyExtractor={item => item.productId}
+                renderItem={itemData => <CartItem 
+                    quantity={itemData.item.quantity}
+                    title={itemData.item.productTitle}
+                    amount={itemData.item.sum}
+                    onRemove={()=>{}}></CartItem>}            
+                />
+
         </View>
     )
 };
