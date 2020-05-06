@@ -5,22 +5,40 @@ import { View ,Text, FlatList, StyleSheet, Button} from 'react-native';
 import { useSelector } from 'react-redux';
 import Colors from '../../constants/Colors';
 
+
 const CartScreen = props =>{
-    // our cart is store in Redux and we use useSelector to bring the items
+    // our cart is store in Redux on app js and we use useSelector to bring the totalamoung cart/reducers.js
     const cartTotalAmount = useSelector(state => state.cart.totalAmount)
+    // our cart is store in Redux on app js and we use useSelector to bring the items cart/reducers.js
+    //const cartItems= useSelector(state => state.cart.items)  // ===> this will retrive an object not an array
+    const cartItems= useSelector(state => {  // we need an array
+        const transformedCartItems =[];
+        for (const key in state.cart.items){
+            transformedCartItems.push({  // it will push a js object
+                productId: key,
+                productTitle: state.cart.items[key].productTitle,  // this name is on my cart-item.js
+                productPrice: state.cart.items[key].productPrice,  // this name is on my cart-item.js
+                quantity: state.cart.items[key].quantity,  // this name is on my cart-item.js
+                sum: state.cart.items[key].sum,  // this name is on my cart-item.js
+           
+            })
+        }
+        console.log(transformedCartItems)
+        return  transformedCartItems;
+        })
+   
     return(
         <View style={styles.screen}>
             <View style={styles.summary}> 
-               
-                     <Text style={styles.summaryText}>Total:
-                    <Text style={styles.amount}>${cartTotalAmount}</Text>
+                    <Text style={styles.summaryText}>
+                     Total:  <Text style={styles.amount}> $ {cartTotalAmount.toFixed(2)}</Text>
                 </Text>
-                
-
-               
-                <Button title="Order Now" />
+                <Button 
+                    color={Colors.accent} 
+                    title="Order Now" 
+                    disabled={cartItems.length === 0 } />
             </View>
-            <View><Text>TCART ITEMS</Text></View>
+            <View><Text>CART ITEMS</Text></View>
         </View>
     )
 };
