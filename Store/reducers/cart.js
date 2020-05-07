@@ -53,39 +53,41 @@ export default (state = initialState, action) =>{
                 }
             };
 
-        case REMOVE_FROM_CART:
-           const selectedCartItem = state.items[action.pid]
-        // we have two cases when we have one item in the cart we remove it enterily from the item object
-        // pid is part of our action 
-        //                    state.item is an object itme is part of myn initial state
-            const currentQty = selectedCartItem.quantity // action pid dinamically access to the value id key here in our items
-            let updateCartItems;
-            if(currentQty > 1){
-                // we need to reduce it
-                    const updateCartItems = new CartItem(
-                        selectedCartItem.quantity - 1,
-                        selectedCartItem.productPrice,
-                        selectedCartItem.productTitle,
-                        selectedCartItem.sum - selectedCartItem.productPrice 
-                        );
-                updateCartItems= {...state.items, [action.pid] : updateCartItems}
-            }else  // we have two cases when we have one item in the cart we remove it enterily from the item object
-                {
-                     updateCartItems = {...state.items};
-                     //[action.pid] is my identifier
-                    delete updateCartItems[action.pid]
-                }
-            return {
-                ...state,
-                items: updateCartItems,
-                totalAmount: state.totalAmount - selectedCartItem.productPrice
+
+            case REMOVE_FROM_CART:
+            const selectedCartItem = state.items[action.pid];
+             // we have two cases when we have one item in the cart we remove it enterily from the item object
+            // pid is part of our action 
+            //                    state.item is an object itme is part of myn initial state
+            const currentQty = selectedCartItem.quantity; // action pid dinamically access to the value id key here in our items
+            let updatedCartItems;
+            if (currentQty > 1) {
+              // need to reduce it, not erase it
+              const updatedCartItem = new CartItem(
+                selectedCartItem.quantity - 1,
+                selectedCartItem.productPrice,
+                selectedCartItem.productTitle,
+                selectedCartItem.sum - selectedCartItem.productPrice
+              );
+              updatedCartItems = { ...state.items, [action.pid]: updatedCartItem };
+            } else { // we have two cases when we have one item in the cart we remove it enterily from the item object
+              updatedCartItems = { ...state.items };
+              //[action.pid] is my identifier
+              delete updatedCartItems[action.pid];
             }
+            return {
+              ...state,
+              items: updatedCartItems,
+              totalAmount: state.totalAmount - selectedCartItem.productPrice
+            };
+        }
+      
+        return state;
+      };
 
-         
-    }
 
-    return state;
-}
+
+
 
 
 

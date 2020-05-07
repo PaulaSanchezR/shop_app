@@ -24,8 +24,9 @@ const CartScreen = props =>{
            
             })
         }
-       
-        return  transformedCartItems;
+       // our array need to be listed the same way all the times
+    //    sort will compare and return a number
+        return  transformedCartItems.sort((a,b)=>{a.productId > b.productId ? 1: -1 });
         })
    const dispatch= useDispatch()
     return(
