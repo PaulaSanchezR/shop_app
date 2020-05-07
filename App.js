@@ -7,12 +7,14 @@ import { AppLoading  } from 'expo'
 import * as Font from 'expo-font'
 //import { composeWithDevTools } from 'redux-devtools-extension' // only when you use the dev-tools
 import cartReducer from './Store/reducers/cart'
+import ordersReducer from './Store/reducers/orders'
 
 
 // we need to combine the reducers we pass an object where we map my reducers
 const rootReducer = combineReducers({
   products: productsReducer,
-  cart: cartReducer
+  cart: cartReducer,
+  order:ordersReducer
 })
 // takes our combine reducer as an argument
 const store = createStore(rootReducer)//, composeWithDevTools())   --> we use only to use the devtools
