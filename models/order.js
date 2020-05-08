@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment'  // I got the error mo
 
 class Order {
     // id for the order
@@ -12,9 +12,8 @@ class Order {
    // we can add a method  or call get to our model 
    get readableDate(){
        // conver the date to humand readable and also pass a object to configure the y d m
-
-
-       //        return this.date.toLocaleDateString('en-EN',{
+//  this code only work on iOS
+//        return this.date.toLocaleDateString('en-EN',{
 //            year:'numeric',
 //            month:'long',
 //            day:'numeric',
@@ -23,6 +22,7 @@ class Order {
 
 //        })
 //    }
+        // this code works for iOS and Android
         return moment(this.date).format('MMMM Do YYYY, hh:mm');
    }
 

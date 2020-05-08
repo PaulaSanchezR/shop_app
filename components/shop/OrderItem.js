@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text,Button,StyleSheet } from 'react-native';
 
 import CartItem from './CartItem'
@@ -7,6 +7,11 @@ import Colors from '../../constants/Colors';
 
 
 const OrderItem = props =>{
+    // we going to control show details with the state
+    // the initial value is false but when we press the botton be going to change the state
+    const [showDetails, setShowDetails] = useState(false)
+
+
     return (
         <View style={styles.orderItem}>
             <View style={styles.summary}>
@@ -14,7 +19,14 @@ const OrderItem = props =>{
                 <Text style={styles.date}>{props.date}</Text>
 
             </View>
-            <Button color={Colors.primary} title ="Show Details"/>
+            <Button color={Colors.primary} title ="Show Details" onPress={()=>{
+                // we will invert the value
+                // prevState is the initial value false
+                // it is was false I will return true
+                setShowDetails(prevState => !prevState)
+            }}/>
+            {/* create some conditions if setShowDetails is true show details */}
+            {showDetails && <View></View>}
         </View>
     )
 };  
@@ -36,7 +48,8 @@ const styles= StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems:'center',
-        width:'100%'
+        width:'100%',
+        marginBottom: 15
     },
     totalAmount:{
         fontFamily: 'open-sans-bold',
