@@ -5,6 +5,6 @@ export const addOrder = (cartItems, totalAmount)=>{
     //we return an acction order
     return { 
         type:ADD_ORDER, 
-        oarderData :{ items: cartItems, amount: totalAmount } 
+        orderData :{ items: cartItems, amount: totalAmount } 
     };
 };

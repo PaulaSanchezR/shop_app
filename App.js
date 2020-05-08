@@ -14,7 +14,7 @@ import ordersReducer from './Store/reducers/orders'
 const rootReducer = combineReducers({
   products: productsReducer,
   cart: cartReducer,
-  order:ordersReducer
+  orders:ordersReducer
 })
 // takes our combine reducer as an argument
 const store = createStore(rootReducer)//, composeWithDevTools())   --> we use only to use the devtools

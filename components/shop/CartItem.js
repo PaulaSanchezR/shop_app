@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import Colors from '../../constants/Colors'
+
 const CartItem =props =>{
     return(
         <View style={styles.cartItem}>

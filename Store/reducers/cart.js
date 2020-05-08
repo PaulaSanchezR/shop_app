@@ -1,4 +1,5 @@
 import { ADD_TO_CART, REMOVE_FROM_CART } from "../actions/cart";
+import { ADD_ORDER } from '../actions/orders'
 import CartItem from "../../models/cart-item"
 
 
@@ -80,9 +81,17 @@ export default (state = initialState, action) =>{
               items: updatedCartItems,
               totalAmount: state.totalAmount - selectedCartItem.productPrice
             };
+            
+            //-----------------------------------------------
+            //                  CLEAR CART
+            // we going to haldle to clear the cart there with the order.js action
+            // ----------------------------------------------
+            
+            case ADD_ORDER:
+                // our initial state is empty
+                 return initialState;
         }
-      
-        return state;
+            return state;
       };
 
 

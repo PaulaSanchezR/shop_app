@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react'  // we need react because we are using JSX sintax on the Ionicons component
 import { Platform, Text } from 'react-native'
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator} from 'react-navigation-stack';

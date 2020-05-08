@@ -10,12 +10,12 @@ export default (state = initialState, action) =>{
     switch(action.type){
         // we going to create a new object order form my model
         case ADD_ORDER: 
-        //                                                          this orderData.items is a proprertie and key value of the addOrder on the order.js action folder
+        //    this orderData.items is a proprertie and key value of the addOrder on the order.js action folder
             const newOrder= new Order(
-                new Date().toString(), 
-                action.orderData.items, 
-                action.orderData.amount,
-                new Date()
+                    new Date().toString(), 
+                    action.orderData.items, 
+                    action.orderData.amount,
+                    new Date()
                 );
 
                 // our order need to be add to our order array we return 
