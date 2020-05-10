@@ -19,14 +19,22 @@ const OrderItem = props =>{
                 <Text style={styles.date}>{props.date}</Text>
 
             </View>
-            <Button color={Colors.primary} title ="Show Details" onPress={()=>{
+            <Button 
+                color={Colors.primary} 
+                title ="Show Details" onPress={()=>{
                 // we will invert the value
                 // prevState is the initial value false
                 // it is was false I will return true
                 setShowDetails(prevState => !prevState)
             }}/>
             {/* create some conditions if setShowDetails is true show details */}
-            {showDetails && <View></View>}
+            {showDetails && <View>
+                {props.items.map(cartItem => <CartItem 
+                  quatity ={cartItem.quatity}
+                  amount ={cartItem.sum}
+                  ttile={cartItem.productTitle}
+                />)}
+            </View>}
         </View>
     )
 };  
