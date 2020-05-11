@@ -1,6 +1,7 @@
 import { ADD_TO_CART, REMOVE_FROM_CART } from "../actions/cart";
 import { ADD_ORDER } from '../actions/orders'
 import CartItem from "../../models/cart-item"
+import { DELETE_PRODUCT } from "../actions/products";
 
 
 // we set up the inicial state
@@ -90,7 +91,25 @@ export default (state = initialState, action) =>{
             case ADD_ORDER:
                 // our initial state is empty
                  return initialState;
-        }
+        
+            case DELETE_PRODUCT:
+            console.log(state.items)
+                // we need to remove the product from the cart if we remove it from the admin 
+               // we ask if the product is on the cart
+               if (!state.items[action.pid]) {
+                   // just return the state because the product is not in the cart
+                    return state
+               }
+                const updateItems= { ...state.items}
+                const itemTotal = state.items[action.pid].sum;
+                delete updateItems[action.pid]
+                return {
+                    ...state,
+                    items: updateItems,
+                    totalAmount: state.totalAmount - itemTotal
+                }
+            }
+
             return state;
       };
 
