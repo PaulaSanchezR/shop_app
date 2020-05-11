@@ -13,7 +13,7 @@ const OrdersScreen = props =>{
 //                                           |     this is coming from orders/reducer initial state
     const orders=useSelector(state => state.orders.orders)
     // we are mapping the orders array
-    console.log(orders)
+    
     return <FlatList 
                 data={orders}
                 keyExtractor={item=> item.id}
@@ -23,6 +23,7 @@ const OrdersScreen = props =>{
                     renderItem={itemData=> <OrderItem //  |
                             amount={itemData.item.totalAmount}
                             date={itemData.item.readableDate}
+                            items={itemData.item.items}
                 />}
                /> 
             }

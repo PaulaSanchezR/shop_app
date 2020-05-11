@@ -21,19 +21,22 @@ const OrderItem = props =>{
             </View>
             <Button 
                 color={Colors.primary} 
-                title ="Show Details" onPress={()=>{
+                title ={showDetails ? "Hide Details" : "Show Details"}
+                onPress={()=>{
                 // we will invert the value
                 // prevState is the initial value false
                 // it is was false I will return true
                 setShowDetails(prevState => !prevState)
             }}/>
             {/* create some conditions if setShowDetails is true show details */}
-            {showDetails && <View>
-                {props.items.map(cartItem => <CartItem 
-                  quatity ={cartItem.quatity}
+            {showDetails && <View sytle={styles.detailItems}>
+                {props.items.map(cartItem => (
+                <CartItem 
+                  key={cartItem.productId}
+                  quantity ={cartItem.quantity}
                   amount ={cartItem.sum}
-                  ttile={cartItem.productTitle}
-                />)}
+                  title={cartItem.productTitle}
+                />))}
             </View>}
         </View>
     )
@@ -68,6 +71,9 @@ const styles= StyleSheet.create({
         fontSize: 16,
         color: '#888'
 
+    },
+    detailItems:{
+        width: '100%'
     }
 });
 

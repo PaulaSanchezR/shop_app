@@ -2,14 +2,14 @@
 
 
 import React from 'react';
-import { FlatList, Text , Platform} from 'react-native'
+import { FlatList, Button, Platform} from 'react-native'
 import { useSelector , useDispatch} from 'react-redux'
 import ProductItem from '../../components/shop/ProductItem'
 import Product from '../../models/products';
 import { HeaderButtons, Item} from 'react-navigation-header-buttons'
 import HeaderButton from '../../components/UI/HeaderButton'
 import * as cartActions  from '../../Store/actions/cart'
-
+import Colors from '../../constants/Colors'
 
 
 
@@ -25,6 +25,17 @@ const ProductsOverviewScreen = props => {
 
     //useDispatch is  
     const dispatch = useDispatch()
+    const selectItemHandler = (id, title) =>{
+         // we going to forward our product data 
+         props.navigation.navigate('ProductDetail', {
+         //                              ^                   
+         //                              |
+         //                         identifier from the ShopNavigation page 
+
+         productId: id , 
+         productTitle: title}) 
+
+    }
     return <FlatList 
             data={products}
             keyExtractor={item => item.id}
@@ -34,19 +45,25 @@ const ProductsOverviewScreen = props => {
                 image ={itemData.item.imageUrl} 
                 title ={itemData.item.title} 
                 price={itemData.item.price}
-                onViewDetail={() =>{
-                    // we going to forward our product data 
-                    props.navigation.navigate('ProductDetail', {productId: itemData.item.id , productTitle: itemData.item.title}) // < -- forward the id
-                    //                              ^                   
-                    //                              |
-                    //                         identifier from the ShopNavigation page 
-
+                onSelect={() =>{
+                   selectItemHandler(itemData.item.id, itemData.item.title)
                 }}
-                onAddToCart={() =>{
-                    // addToCart is my function action
-                    dispatch(cartActions.addToCart(itemData.item))
-                }}
-            />}
+               
+            >
+                <Button 
+                    color={Colors.accent} 
+                    title="View Detail" 
+                    onPress={() =>{
+                        selectItemHandler(itemData.item.id, itemData.item.title)
+                     }}/>
+                <Button  
+                    color={Colors.accent}
+                    title="To Cart" 
+                    onPress={() =>{
+                        dispatch(cartActions.addToCart(itemData.item))
+                        }}/>
+            </ProductItem>
+        }
             />
 }
 

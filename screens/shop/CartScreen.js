@@ -9,7 +9,7 @@ import * as cartActions from '../../Store/actions/cart'
 import * as ordersActions from '../../Store/actions/orders'
 
 const CartScreen = props =>{
-    // our cart is store in Redux on app js and we use useSelector to bring the totalamoung cart/reducers.js
+    
     const cartTotalAmount = useSelector(state => state.cart.totalAmount)
     // our cart is store in Redux on app js and we use useSelector to bring the items cart/reducers.js
     //const cartItems= useSelector(state => state.cart.items)  // ===> this will retrive an object not an array
@@ -51,6 +51,7 @@ const CartScreen = props =>{
                     quantity={itemData.item.quantity}
                     title={itemData.item.productTitle}
                     amount={itemData.item.sum}
+                    deletable
                     onRemove={()=>{
                          dispatch(cartActions.removeFromCart(itemData.item.productId))   
                     }}></CartItem>}            
