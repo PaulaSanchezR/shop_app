@@ -7,6 +7,7 @@ import { createStackNavigator} from 'react-navigation-stack';
 import { createDrawerNavigator } from 'react-navigation-drawer'
 // import Colors from '../constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
+import EditProductsScreen from '../screens/user/EditProductsScreen'
 import ProductsOverviewScreen from '../screens/shop/ProductsOverviewScreen'
 import ProductDetailScreen from '../screens/shop/ProductDetailScreen'
 import CartScreen from '../screens/shop/CartScreen'
@@ -85,7 +86,8 @@ const OrdersNavigator = createStackNavigator({
 
 const AdminNavigator = createStackNavigator(
     {
-        UserProducts : UserProductsScreen
+        UserProducts : UserProductsScreen,
+        EditProduct: EditProductsScreen
 }, {
     // add icons on the drawer menu
     navigationOptions:{
@@ -100,6 +102,8 @@ const AdminNavigator = createStackNavigator(
     },
     defaultNavigationOptions: defaultNavOptions
 })
+
+//---------------------------------------------------
 
 
 const ShopNavigator = createDrawerNavigator({

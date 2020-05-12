@@ -14,6 +14,11 @@ const UserProductsScreen = props =>{
     //                                                 |
     const userProducts = useSelector(state => state.products.userProducts)
     const dispatch = useDispatch();
+    const editProductHandler= (id) =>{
+        props.navigation.navigate('EditProduct', {productId: id})  // EditProduct is the identifier that we registr on shopnavigatior.js
+
+    }
+
     return (
         <FlatList 
             data={userProducts}
@@ -23,13 +28,15 @@ const UserProductsScreen = props =>{
                 image={itemData.item.imageUrl}
                 title={itemData.item.title}
                 price={itemData.item.price}
-                onSelect ={() =>{}}
+                onSelect ={() =>{
+                     editProductHandler(itemData.item.id)
+                }}
              > 
              <Button 
                 color={Colors.accent} 
                 title="Edit" 
                 onPress={() =>{
-
+                    editProductHandler(itemData.item.id)
                 }}/>
             <Button  
                 color={Colors.accent}
@@ -56,7 +63,19 @@ UserProductsScreen.navigationOptions = navData => {
                    navData.navigation.toggleDrawer()
                }}
                />
-           </HeaderButtons>)
+           </HeaderButtons>
+           ),
+           headerRight: ( 
+            <HeaderButtons HeaderButtonComponent={HeaderButton} >
+               <Item 
+                   title='Add' 
+                   iconName={Platform.OS ==='android' ? 'ios-create' : 'ios-create'}
+                   onPress={()=>{
+                       navData.navigation.navigate('EditProduct')
+                   }}
+                   />
+               </HeaderButtons>
+               ),
    } 
 
 

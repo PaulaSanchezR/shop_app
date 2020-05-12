@@ -69,13 +69,13 @@ const styles= StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
-        height: '25%',
+        height: '23%',
         color:'#5D6D7E'
 
     },
     detail:{
         alignItems:'center',
-        height:'15%',
+        height:'17%',
         padding: 5
     },
     touchable:{
