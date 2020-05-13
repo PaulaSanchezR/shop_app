@@ -1,5 +1,5 @@
 import React from "react"
-import { Platform, Button, FlatList} from 'react-native'
+import { Platform, Button, FlatList, Alert} from 'react-native'
 import  { useSelector, useDispatch } from 'react-redux'
 import { HeaderButtons, Item} from 'react-navigation-header-buttons'
 import HeaderButton from '../../components/UI/HeaderButton'
@@ -17,6 +17,19 @@ const UserProductsScreen = props =>{
     const editProductHandler= (id) =>{
         props.navigation.navigate('EditProduct', {productId: id})  // EditProduct is the identifier that we registr on shopnavigatior.js
 
+    }
+
+       // alert component
+       const deleteHandler = (id) =>{
+        Alert.alert('Are you sure?' , 'Do you really want to delete this item',[
+            {text: 'No' , style:'default'},
+            {
+                text: 'Yes', 
+                style:'destructive', 
+                onPress:() =>{
+                    dispatch(productsActions.deleteProduct(id))
+            }}
+        ])
     }
 
     return (
@@ -41,9 +54,12 @@ const UserProductsScreen = props =>{
             <Button  
                 color={Colors.accent}
                 title="Delete" 
-                onPress={() =>{
-                    dispatch(productsActions.deleteProduct(itemData.item.id))
-                }}/>
+                // we need to pass the id to the function, there two ways on an annonimos function
+                onPress={ () => {
+                    deleteHandler(itemData.item.id)}}
+                // or by the bind , bind always need a this key word
+                onPress={ deleteHandler.bind(this, itemData.item.id)}
+                />
                 </ProductItem>
         }/>
     )

@@ -33,28 +33,26 @@ export default (state = initialState, action ) =>{
                 const productIndex= state.userProducts.findIndex(prod => prod.id === action.pid );
                 // update product is a new object that we need need to prepopuate with some data
                 // owner id wont change
-                const updateProduct = new Product(
-                    action.pid, 
+                const updatedProduct = new Product(
+                    action.pid,
                     state.userProducts[productIndex].ownerId,
-                    state.productData.title,
-                    state.productData.imageUrl,
-                    state.productData.description,
-                    state.productData[productIndex].price,
-                    );
-                const updateUserProducts = [...state.userProducts];
-                updateUserProducts[productIndex] = updateProduct;
-
-                const availableProductIndex = state.availableProducts.findIndex(
+                    action.productData.title,
+                    action.productData.imageUrl,
+                    action.productData.description,
+                    state.userProducts[productIndex].price
+                  );
+                  const updatedUserProducts = [...state.userProducts];
+                  updatedUserProducts[productIndex] = updatedProduct;
+                  const availableProductIndex = state.availableProducts.findIndex(
                     prod => prod.id === action.pid
-                );
-                const updateAvailableProducts = [...state.availableProducts]
-                updateAvailableProducts[availableProductIndex] = updateProduct
-                
-                return {
+                  );
+                  const updatedAvailableProducts = [...state.availableProducts];
+                  updatedAvailableProducts[availableProductIndex] = updatedProduct;
+                  return {
                     ...state,
-                    availableProducts : updateAvailableProducts,
-                    userProducts : updateUserProducts
-                }
+                    availableProducts: updatedAvailableProducts,
+                    userProducts: updatedUserProducts
+                  };
 
         case DELETE_PRODUCT:
         // if delete product is the case we need to delete products form the array
