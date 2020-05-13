@@ -18,14 +18,14 @@ export const createProduct = (title, description, imageUrl, price) =>{
 }
 
 
-export const updateProduct = (id, title, description, imageUrl, price) =>{
+export const updateProduct = (id, title, description, imageUrl) =>{
     return { type: CREATE_PRODUCT, 
         pid: id,
         productData:{
         title:title,
         description:description,
         imageUrl, // modern javascritp
-        price
+        
     }
   }
 }
