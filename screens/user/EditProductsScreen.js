@@ -1,10 +1,10 @@
 import React , { useState, useEffect, useCallback , useReducer} from 'react'
-import { View, Text, ScrollView,TextInput, StyleSheet, Platform, Alert } from 'react-native'
+import { View, Text, ScrollView, StyleSheet, Platform, Alert } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { HeaderButtons, Item} from 'react-navigation-header-buttons'
 import HeaderButton from '../../components/UI/HeaderButton'
 import * as productsActions from '../../Store/actions/products'
-
+import Input from '../../components/UI/Input'
 
 // create a reducer it is outside of the component we can do it inside but we dont depend on props we can do it outside
 // also this wont rebild everytime the components render and we dont need to use callback that cost some performace
@@ -14,14 +14,33 @@ const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 
 const formReducer = (state, action) =>{
     if(action.type === 'FORM_INPUT_UPDATE') {
+        const updateValues={
+            ...state.inputValues,
+            [action.input]: action.value
+        };
 
+        const updatedValidities = {
+            ...state.inputValidities,
+            [action.input] :action.isValid
+        }
+        let updatedformIsValid = true;
+        for( const key in updatedValidities) {
+            updatedformIsValid = updatedformIsValid && updatedValidities[key]
+        }
+        return {
+            formIsValid: updatedformIsValid,
+            inputValidities: updatedValidities,
+            inputValues: updateValues
+        }
     }
+    return state;
 }
 
 const EditProductsScreen = props =>{
     // to prepopulet the fiels we use getParam and we can retrive productId
     const prodId = props.navigation.getParam('productId')
-    const editedProduct= useSelector(state => state.products.userProducts.find(prod => prod.id === prodId))
+    const editedProduct= useSelector(state => 
+        state.products.userProducts.find(prod => prod.id === prodId))
 
     const dispatch = useDispatch()
 // use reduce take a reducer function and the second argument with the initial state
@@ -59,18 +78,31 @@ const EditProductsScreen = props =>{
     // the parenatesis ensure that the function is recreat everytime the componen reder and then we avoid 
     // and infinty loop, the [] dependecis avoid the infinit loop
     const submitHandler = useCallback(() =>{
-        //before to edit or add we need to check our state validation
-        if(!titleIsValid){
-            Alert.alert('Wrong Input','Please check the errors in the form' , [{ text:'Okay'}])
+       
+        if(!formState.formIsValid){
+            Alert.alert('Wrong Input','Please check the errors in the form' , [
+                { text:'Okay'}
+            ])
             return;
         }
          if(editedProduct) {
-             dispatch(productsActions.updateProduct(prodId,title,description,imageUrl))
+             dispatch(
+                 productsActions.updateProduct(
+                     prodId,
+                     formState.inputValues.title,
+                     formState.inputValues.description,
+                     formState.inputValues.imageUrl
+                     ))
          } else {  //we adding we conver the price to a number
-             dispatch(productsActions.createProduct(title, description, imageUrl, +price))
+             dispatch(productsActions.createProduct(
+                formState.inputValues.title, 
+                formState.inputValues.description, 
+                formState.inputValues.imageUrl, 
+                +formState.inputValues.price
+                ))
             }
          props.navigation.goBack();
-    },[dispatch, prodId, title,description,imageUrl, price, titleIsValid]) //we need the dependencis to recreate for the updates values otherwise  when we submit the form we will never get the inf the user enter
+    },[dispatch, prodId, formState]) //we need the dependencis to recreate for the updates values otherwise  when we submit the form we will never get the inf the user enter
   
     // to execute the function everytime the component rerender
     useEffect(() =>{
@@ -81,70 +113,72 @@ const EditProductsScreen = props =>{
         [submitHandler]
     )
 
-    //---------------------------------------------------------
-    //                          VALIDATIONS 
-    //---------------------------------------------------------
 
-    const textChangeHandler = (inputIdentifier, text) =>{
-        let isValid = false;
-        if(text.trim().length > 0){
-            isValid=true
-        } 
+    const inputChangeHandler = useCallback(
+        (inputIdentifier, inputValue, inputValidity) =>{
+      
 // we pass an object that describe my acctions
      dispatchFormState({
          type: FORM_INPUT_UPDATE, 
-         value:text, 
-         isValid:isValid,
+         value:inputValue, 
+         isValid:inputValidity,
          input: inputIdentifier //we need to send the input how trigger this
         
         })
-    }
+    },[dispatchFormState]) 
     return (
         <ScrollView>
             <View style={styles.form}>
-                <View style={styles.formControl} >
-                    <Text style={styles.label} >Title</Text>
-                    {/* onChangeText will update the state with text */}
-                    <TextInput 
-                        style={styles.input} 
-                        value={title} 
-                        onChangeText={textChangeHandler.bind(this, 'title' )}
+                <Input
+                    label='Title'
+                    errorText='Please enter a valid title'
+                    keyboardType='default'
+                    autoCapitalize='sentences'
+                    autoCorrect
+                    returnKeyType='next'  // control just the wait the botton looks like
+                    onInputChange={inputChangeHandler}
+                    initialValue={editedProduct ? editedProduct.title : ''}
+                    initiallyValid={!!editedProduct}
+                    required
+                />
+                <Input
+                    label='ImageUrl'
+                    errorText='Please enter a valid image Url'
+                    keyboardType='default'
+                    autoCorrect
+                    returnKeyType='next'  // control just the wait the botton looks like
+                    onInputChange={inputChangeHandler}
+                    initialValue={editedProduct ? editedProduct.imageUrl : ''}
+                    initiallyValid={!!editedProduct}
+                    required
+                />
+              
+                {editedProduct ? null :(
+                    <Input
+                    label='Price'
+                    errorText='Please enter a valid price'
+                    keyboardType='decimal-pad'
+                    returnKeyType='next'  // control just the wait the botton looks like
+                    onInputChange={inputChangeHandler}
+                    required
+                    min={0.1}
+                    />
+                    )}   
+                    <Input
+                        label='Description'
+                        errorText='Please enter a valid Description'
                         keyboardType='default'
                         autoCapitalize='sentences'
                         autoCorrect
-                        returnKeyType='next'  // control just the wait the botton looks like
-                        onEndEditing={() =>console.log('onEndEditing')} // it trigg//er when I move to another input
-                        onSubmitEditing={() => console.log('onSubmitEditing')} // it fire when the returnKeyNext botton is click
-                        />
-                    {/* if titleIsValid is false we put a text */}
-                        {!titleIsValid && <Text>Please enter a valid title!</Text>}
-                </View>
-                <View style={styles.formControl} >
-                    <Text style={styles.label} >ImageUrl</Text>
-                    <TextInput 
-                        style={styles.input} 
-                        value={imageUrl} 
-                        onChangeText={textChangeHandler.bind(this, 'imageUrl')}
-                        
-                        />
-                </View>
-                {editedProduct ? null :(
-                    <View style={styles.formControl} >
-                        <Text style={styles.label} >Price</Text>
-                        <TextInput 
-                            style={styles.input} 
-                            value={price} 
-                            onChangeText={textChangeHandler.bind(this, 'price' )}
-                            keyboardType='decimal-pad'
-                            />
-                    </View>)}   
-                <View style={styles.formControl} >
-                    <Text style={styles.label} >Description</Text>
-                    <TextInput 
-                        style={styles.input}  
-                        value={description} 
-                        onChangeText={textChangeHandler.bind(this, 'description' )}/>
-                </View>
+                        multiline
+                        numberOfLines ={3}
+                        onInputChange={inputChangeHandler}
+                        initialValue={editedProduct ? editedProduct.description : ''}
+                        initiallyValid={!!editedProduct}
+                        required
+                        minLength={5}
+                    />
+                
             </View>    
         </ScrollView>
    )
@@ -173,20 +207,6 @@ const styles= StyleSheet.create({
     form:{
         margin:20
     },
-    formControl:{
-        width:'100%'
-    },
-    label:{
-        fontFamily:'open-sans-bold',
-        marginVertical: 8
-    },
-    input:{
-        paddingHorizontal:2,
-        paddingVertical : 5,
-        borderBottomColor: '#ccc',
-        borderWidth: 1
-    }
-
 })
 
 export default EditProductsScreen 
