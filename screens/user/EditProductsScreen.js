@@ -1,5 +1,5 @@
-import React , { useState, useEffect, useCallback , useReducer} from 'react'
-import { View, Text, ScrollView, StyleSheet, Platform, Alert } from 'react-native'
+import React , { useEffect, useCallback , useReducer} from 'react'
+import { View,  ScrollView, StyleSheet, Platform, Alert, KeyboardAvoidingView } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { HeaderButtons, Item} from 'react-navigation-header-buttons'
 import HeaderButton from '../../components/UI/HeaderButton'
@@ -123,13 +123,14 @@ const EditProductsScreen = props =>{
          value:inputValue, 
          isValid:inputValidity,
          input: inputIdentifier //we need to send the input how trigger this
-        
         })
     },[dispatchFormState]) 
-    return (
+    return (    
+     <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={100}>
         <ScrollView>
             <View style={styles.form}>
                 <Input
+                    id='title'
                     label='Title'
                     errorText='Please enter a valid title'
                     keyboardType='default'
@@ -142,6 +143,7 @@ const EditProductsScreen = props =>{
                     required
                 />
                 <Input
+                    id='imageUrl'
                     label='ImageUrl'
                     errorText='Please enter a valid image Url'
                     keyboardType='default'
@@ -155,6 +157,7 @@ const EditProductsScreen = props =>{
               
                 {editedProduct ? null :(
                     <Input
+                    id='price'
                     label='Price'
                     errorText='Please enter a valid price'
                     keyboardType='decimal-pad'
@@ -165,6 +168,7 @@ const EditProductsScreen = props =>{
                     />
                     )}   
                     <Input
+                        id='description'
                         label='Description'
                         errorText='Please enter a valid Description'
                         keyboardType='default'
@@ -178,9 +182,9 @@ const EditProductsScreen = props =>{
                         required
                         minLength={5}
                     />
-                
             </View>    
         </ScrollView>
+     </KeyboardAvoidingView>
    )
 };
 
