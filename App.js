@@ -1,6 +1,7 @@
 import React ,{ useState } from 'react';
-import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers,  applyMiddleware } from 'redux';
 import { Provider } from 'react-redux'
+import ReduxThunk from 'redux-thunk'
 import productsReducer from './Store/reducers/products'
 import ShopNavigation from './navigation/ShopNavigation'
 import { AppLoading  } from 'expo'
@@ -16,8 +17,8 @@ const rootReducer = combineReducers({
   cart: cartReducer,
   orders:ordersReducer
 })
-// takes our combine reducer as an argument
-const store = createStore(rootReducer)//, composeWithDevTools())   --> we use only to use the devtools
+// takes our combine reducer as an argument, the second argument is ReduxThunk
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk))//, composeWithDevTools())   --> we use only to use the devtools
 
 // to load the font
 const fetchFonts=  () =>{
