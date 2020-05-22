@@ -26,7 +26,14 @@ export const createProduct = (title, description, imageUrl, price) =>{
                       price
                   })
                 })
-        dispatch ({ type: CREATE_PRODUCT, productData:{
+
+        const resData =   await response.json()  ;
+        console.log(resData)
+
+        dispatch ({ 
+            type: CREATE_PRODUCT, 
+            productData:{
+            id: resData.name,
             title:title,
             description:description,
             imageUrl, // modern javascritp
