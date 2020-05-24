@@ -1,7 +1,7 @@
 // this sreen show the product when the app load list of all the products
 
-
-import React from 'react';
+// I use useEffect where this comoponent loads
+import React, { useEffect } from 'react';
 import { FlatList, Button, Platform} from 'react-native'
 import { useSelector , useDispatch} from 'react-redux'
 import ProductItem from '../../components/shop/ProductItem'
@@ -10,8 +10,7 @@ import { HeaderButtons, Item} from 'react-navigation-header-buttons'
 import HeaderButton from '../../components/UI/HeaderButton'
 import * as cartActions  from '../../Store/actions/cart'
 import Colors from '../../constants/Colors'
-
-
+import * as productsActions from '../../Store/actions/products'
 
 
 const ProductsOverviewScreen = props => {
@@ -25,6 +24,12 @@ const ProductsOverviewScreen = props => {
 
     //useDispatch is  
     const dispatch = useDispatch()
+
+    useEffect(()=>{
+        dispatch(productsActions.fetchProducts())
+    },[dispatch]);
+
+
     const selectItemHandler = (id, title) =>{
          // we going to forward our product data 
          props.navigation.navigate('ProductDetail', {
