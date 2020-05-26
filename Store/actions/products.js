@@ -48,7 +48,16 @@ dispatch({type: SET_PRODUCTS, products: loadedProduct})
   };  
 };
 export const deleteProduct = productId =>{
-    return {type:DELETE_PRODUCT, pid: productId }
+    return async dispatch =>{
+        await fetch(
+            `https://shop-app-7b156.firebaseio.com/products/${productId}.json`, // fetch is use to send post request or put request any kind or HTTP request
+        //  product.json is just a firebase thing you can create any json file like this
+                {
+                  method: 'DELETE', 
+                }
+             )
+        dispatch({type:DELETE_PRODUCT, pid: productId })
+    }
 }
 
 export const createProduct = (title, description, imageUrl, price) =>{
@@ -90,13 +99,32 @@ export const createProduct = (title, description, imageUrl, price) =>{
 
 
 export const updateProduct = (id, title, description, imageUrl) =>{
-    return { type: UPDATE_PRODUCT, 
-        pid: id,
-        productData:{
-        title:title,
-        description:description,
-        imageUrl, // modern javascritp
-        
-    }
+ 
+    // we can reach out the server and update our data there
+    return async dispatch =>{
+        // we wait for this to complete
+              await fetch(
+            `https://shop-app-7b156.firebaseio.com/products/${id}.json`, // fetch is use to send post request or put request any kind or HTTP request
+        //  product.json is just a firebase thing you can create any json file like this
+                {
+                  method: 'PATCH', // will update in the place 
+                  headers:{
+                      'Content-Type':'application/json'
+                  },
+                  body: JSON.stringify({
+                      title,
+                      description,
+                      imageUrl
+                 })
+                }
+                )
+        dispatch({ type: UPDATE_PRODUCT, 
+            pid: id,
+            productData:{
+            title:title,
+            description:description,
+            imageUrl // modern javascritp
+        }
+    })
   }
 }

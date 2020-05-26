@@ -13,6 +13,7 @@ import Colors from '../../constants/Colors'
 import * as productsActions from '../../Store/actions/products'
 
 
+
 const ProductsOverviewScreen = props => {
     // adding the spiner
     const [isLoading, setIsLoading] =useState(false);
@@ -30,6 +31,7 @@ const ProductsOverviewScreen = props => {
     const dispatch = useDispatch()
 
     const loadProducts = useCallback (async () =>{
+        // this loadProdcut is going to load whenever we visit this page
         //when the customer press try again error need to set null again
         setError(null)
         setIsLoading(true);
@@ -40,6 +42,19 @@ const ProductsOverviewScreen = props => {
         }
         setIsLoading(false)
     },[dispatch,setIsLoading,setError])
+
+// refetch the data 
+    useEffect(()=>{
+         const willFocusSub= props.navigation.addListener('willFocus', loadProducts)
+// we can return something we will return a clean function which runs whenever this effect is about 
+//retrun or when this component is efect and we can clean it
+        return ()=>{
+            willFocusSub.remove()
+        }
+
+        },[loadProducts])
+    
+
 
     useEffect(()=>{
         loadProducts();
