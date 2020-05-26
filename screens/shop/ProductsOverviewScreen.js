@@ -1,8 +1,8 @@
 // this sreen show the product when the app load list of all the products
 
 // I use useEffect where this comoponent loads
-import React, { useEffect } from 'react';
-import { FlatList, Button, Platform} from 'react-native'
+import React, { useState, useEffect, useCallback } from 'react';
+import { StyleSheet, Text, View, FlatList, Button, Platform, ActivityIndicator} from 'react-native'
 import { useSelector , useDispatch} from 'react-redux'
 import ProductItem from '../../components/shop/ProductItem'
 import Product from '../../models/products';
@@ -14,6 +14,9 @@ import * as productsActions from '../../Store/actions/products'
 
 
 const ProductsOverviewScreen = props => {
+    // adding the spiner
+    const [isLoading, setIsLoading] =useState(false);
+
     // get the products with useSelector that take a function that automatically
     // recibe the state as an input and return any data that you want from there
     // this the redux state is on APP.js     same name on the redux state om app.js
@@ -21,13 +24,26 @@ const ProductsOverviewScreen = props => {
     //                                              |           
     const products = useSelector(state => state.products.availableProducts)
      // products is an array
-
+// catching the error message 
+    const [error, setError]= useState()
     //useDispatch is  
     const dispatch = useDispatch()
 
+    const loadProducts = useCallback (async () =>{
+        //when the customer press try again error need to set null again
+        setError(null)
+        setIsLoading(true);
+        try {
+            await dispatch(productsActions.fetchProducts())
+        } catch(err) { 
+            setError(err.message)
+        }
+        setIsLoading(false)
+    },[dispatch,setIsLoading,setError])
+
     useEffect(()=>{
-        dispatch(productsActions.fetchProducts())
-    },[dispatch]);
+        loadProducts();
+    },[dispatch, loadProducts]);
 
 
     const selectItemHandler = (id, title) =>{
@@ -40,6 +56,37 @@ const ProductsOverviewScreen = props => {
          productId: id , 
          productTitle: title}) 
 
+    }
+    if (isLoading) {
+        return(
+         <View style={styles.centered}>
+            <ActivityIndicator size='large' color={Colors.primary}/>
+        </View>
+        )
+    }
+// if we have error message
+
+    if(error){
+        return(
+            <View style={styles.centered}>
+               <Text>An error occurred!</Text>
+               <Button 
+                  title="Try again" 
+                  onPress={loadProducts}
+                  color={Colors.primary} 
+            />
+           </View>
+           )
+    } 
+
+    // if we have not products
+
+    if(!isLoading && products.length === 0 ){
+        return(
+            <View style={styles.centered}>
+               <Text>No products found. Please add some</Text>
+           </View>
+           )
     }
     return <FlatList 
             data={products}
@@ -102,6 +149,14 @@ ProductsOverviewScreen.navigationOptions = navData => {
     ) 
   }
 }
+
+const styles= StyleSheet.create({
+    centered:{
+        flex:1, 
+        justifyContent:'center', 
+        alignItems:'center'
+    }
+})
 
 export default ProductsOverviewScreen            
     //                                  
