@@ -1,4 +1,4 @@
-import { ADD_ORDER } from '../actions/orders'
+import { ADD_ORDER , SET_ORDERS} from '../actions/orders'
 import Order from '../../models/order'
 
 
@@ -8,6 +8,11 @@ const initialState = {
 
 export default (state = initialState, action) =>{
     switch(action.type){
+        case SET_ORDERS:
+        // I need to return a new state object where orders is equal to action.orders
+           return {
+                orders: action.orders
+           }
         // we going to create a new object order form my model
         case ADD_ORDER: 
         //    this orderData.items is a proprertie and key value of the addOrder on the order.js action folder
