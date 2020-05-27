@@ -1,10 +1,11 @@
-import React , { useEffect, useCallback , useReducer} from 'react'
-import { View,  ScrollView, StyleSheet, Platform, Alert, KeyboardAvoidingView } from 'react-native'
+import React , { useState, useEffect, useCallback , useReducer} from 'react'
+import { View,  ScrollView, StyleSheet, Platform, Alert, KeyboardAvoidingView,  ActivityIndicator } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { HeaderButtons, Item} from 'react-navigation-header-buttons'
 import HeaderButton from '../../components/UI/HeaderButton'
 import * as productsActions from '../../Store/actions/products'
 import Input from '../../components/UI/Input'
+import Colors from '../../constants/Colors';
 
 // create a reducer it is outside of the component we can do it inside but we dont depend on props we can do it outside
 // also this wont rebild everytime the components render and we dont need to use callback that cost some performace
@@ -38,6 +39,8 @@ const formReducer = (state, action) =>{
 
 const EditProductsScreen = props =>{
     // to prepopulet the fiels we use getParam and we can retrive productId
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState()
     const prodId = props.navigation.getParam('productId')
     const editedProduct= useSelector(state => 
         state.products.userProducts.find(prod => prod.id === prodId))
@@ -61,7 +64,15 @@ const EditProductsScreen = props =>{
                 description:editedProduct ? true:false
             },
             formIsValid:editedProduct ? true : false
-        })
+        });
+
+      // this use effect will bring the errors from the update and delete product action
+      // this rerun whereever error changes the error is comming from the cathc edit or update
+      useEffect(() =>{
+        if(error) {
+            Alert.alert('An error occured', error, [{ text: 'Okay'}])
+        }
+      },[error])  
 
 // -------------------------------------------------------------------------------------------------
 // BEFORE USEREDUCER THIS WAS THE INITIAL STATE
@@ -77,7 +88,7 @@ const EditProductsScreen = props =>{
     // add a product when updated
     // the parenatesis ensure that the function is recreat everytime the componen reder and then we avoid 
     // and infinty loop, the [] dependecis avoid the infinit loop
-    const submitHandler = useCallback(() =>{
+    const submitHandler = useCallback( async () =>{
        
         if(!formState.formIsValid){
             Alert.alert('Wrong Input','Please check the errors in the form' , [
@@ -85,23 +96,38 @@ const EditProductsScreen = props =>{
             ])
             return;
         }
-         if(editedProduct) {
-             dispatch(
-                 productsActions.updateProduct(
-                     prodId,
-                     formState.inputValues.title,
-                     formState.inputValues.description,
-                     formState.inputValues.imageUrl
-                     ))
-         } else {  //we adding we conver the price to a number
-             dispatch(productsActions.createProduct(
-                formState.inputValues.title, 
-                formState.inputValues.description, 
-                formState.inputValues.imageUrl, 
-                +formState.inputValues.price
-                ))
-            }
-         props.navigation.goBack();
+
+        // when we are about to  dispatch this no matter if we are editing or if we are creating I want to setIsLoading and setError
+        setError(null)
+        setIsLoading(true) 
+
+        //to handel error we  need to wrap  the entire if with try and catch the potencial errors
+        try{
+            if(editedProduct) {
+               
+               await dispatch(
+                    productsActions.updateProduct(
+                        prodId,
+                        formState.inputValues.title,
+                        formState.inputValues.description,
+                        formState.inputValues.imageUrl
+                        ))
+            } else {  //we adding we conver the price to a number
+               await dispatch(productsActions.createProduct(
+                   formState.inputValues.title, 
+                   formState.inputValues.description, 
+                   formState.inputValues.imageUrl, 
+                   +formState.inputValues.price
+                   ))
+               }
+               props.navigation.goBack();    
+        }catch(err){
+            setError(err.message)
+        }
+         //we wait until the if finish
+         setIsLoading(false)   
+                // if a error occure I dont want to navigate away
+                //props.navigation.goBack();
     },[dispatch, prodId, formState]) //we need the dependencis to recreate for the updates values otherwise  when we submit the form we will never get the inf the user enter
   
     // to execute the function everytime the component rerender
@@ -125,6 +151,12 @@ const EditProductsScreen = props =>{
          input: inputIdentifier //we need to send the input how trigger this
         })
     },[dispatchFormState]) 
+
+// to show the ativityIndicator
+if(isLoading) {
+    return <View style={styles.center}><ActivityIndicator size='large' color={Colors.primary}/></View>
+}
+
     return (    
     //     <KeyboardAvoidingView
     //     style={{ flex: 1 }}
@@ -213,6 +245,11 @@ const styles= StyleSheet.create({
     form:{
         margin:20
     },
+    center:{
+        flex:1,
+        justifyContent:'center',
+        alignItems:'center'
+    }
 })
 
 export default EditProductsScreen 

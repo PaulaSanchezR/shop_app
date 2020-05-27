@@ -49,13 +49,19 @@ dispatch({type: SET_PRODUCTS, products: loadedProduct})
 };
 export const deleteProduct = productId =>{
     return async dispatch =>{
-        await fetch(
+      const response=  await fetch(
             `https://shop-app-7b156.firebaseio.com/products/${productId}.json`, // fetch is use to send post request or put request any kind or HTTP request
         //  product.json is just a firebase thing you can create any json file like this
                 {
                   method: 'DELETE', 
                 }
              )
+
+             if(!response.ok){
+                // when is a 400 or 500 error, could be that the link is broken
+                throw new Error('Something went wrong, we can dont delete the item')
+
+            }   
         dispatch({type:DELETE_PRODUCT, pid: productId })
     }
 }
@@ -103,7 +109,7 @@ export const updateProduct = (id, title, description, imageUrl) =>{
     // we can reach out the server and update our data there
     return async dispatch =>{
         // we wait for this to complete
-              await fetch(
+          const response=    await fetch(
             `https://shop-app-7b156.firebaseio.com/products/${id}.json`, // fetch is use to send post request or put request any kind or HTTP request
         //  product.json is just a firebase thing you can create any json file like this
                 {
@@ -117,7 +123,12 @@ export const updateProduct = (id, title, description, imageUrl) =>{
                       imageUrl
                  })
                 }
-                )
+                );
+                if(!response.ok){
+                    // when is a 400 or 500 error, could be that the link is broken
+                    throw new Error('Something went wrong we can not update the Item')
+
+                }
         dispatch({ type: UPDATE_PRODUCT, 
             pid: id,
             productData:{

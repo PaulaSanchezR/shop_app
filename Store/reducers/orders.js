@@ -12,10 +12,10 @@ export default (state = initialState, action) =>{
         case ADD_ORDER: 
         //    this orderData.items is a proprertie and key value of the addOrder on the order.js action folder
             const newOrder= new Order(
-                    new Date().toString(), 
+                    action.orderData.id, 
                     action.orderData.items, 
                     action.orderData.amount,
-                    new Date()
+                    action.orderData.date
                 );
 
                 // our order need to be add to our order array we return 
