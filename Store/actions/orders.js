@@ -17,7 +17,7 @@ export const fetchOrders = () =>{
                  if(!response.ok){ // ok is a property ot the fetch
                     // you can dive into the response body to find out what is wrong there
                     // if I get a 400 or 500 status code  
-                    throw new Error("Something went wrong")
+                    throw new Error("Something went wrong accessing the orders")
                  }
             const resData =   await response.json()  ;
            

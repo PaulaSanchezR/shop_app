@@ -17,7 +17,8 @@ import * as productsActions from '../../Store/actions/products'
 const ProductsOverviewScreen = props => {
     // adding the spiner
     const [isLoading, setIsLoading] =useState(false);
-
+    // for refresing
+    const [isRefresing, setIsRefresing] = useState(false)
     // get the products with useSelector that take a function that automatically
     // recibe the state as an input and return any data that you want from there
     // this the redux state is on APP.js     same name on the redux state om app.js
@@ -34,13 +35,15 @@ const ProductsOverviewScreen = props => {
         // this loadProdcut is going to load whenever we visit this page
         //when the customer press try again error need to set null again
         setError(null)
-        setIsLoading(true);
+        setIsRefresing(true)
+        //setIsLoading(true);
         try {
             await dispatch(productsActions.fetchProducts())
         } catch(err) { 
             setError(err.message)
         }
-        setIsLoading(false)
+        setIsRefresing(false)
+        //setIsLoading(false)
     },[dispatch,setIsLoading,setError])
 
 // refetch the data 
@@ -57,7 +60,15 @@ const ProductsOverviewScreen = props => {
 
 
     useEffect(()=>{
-        loadProducts();
+        // we set this here where we trigger load products when the component
+        // loads 
+        setIsLoading(true);
+        // we can do this because loadProducts  return a promese because is having  this async keyword
+        // and we get the loading spinner when this initially loads but not when it reloads 
+        // means that when we visit this page, we dont see the spinner
+        loadProducts().then(()=>{
+            setIsLoading(false)
+        })
     },[dispatch, loadProducts]);
 
 
@@ -103,7 +114,11 @@ const ProductsOverviewScreen = props => {
            </View>
            )
     }
-    return <FlatList 
+    return (
+         <FlatList 
+            onRefresh={loadProducts}
+            // this refressiing will point at stateful variable and we have isLoading 
+            refreshing={isRefresing}
             data={products}
             keyExtractor={item => item.id}
             //renderItem ponts on a function that render our diffents items
@@ -131,7 +146,7 @@ const ProductsOverviewScreen = props => {
                         }}/>
             </ProductItem>
         }
-            />
+            />)
 }
 
 // we need to add the cart page on ShopNavigator,
